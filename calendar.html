@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="calendar.css">
+    </head>
+    <body>
+        <div xmlns="http://www.w3.org/1999/xhtml" style="" class="redCalendar">
+            <table class="redCalendar">
+                <thead>
+                    <tr>
+                        <th class="table-title" colspan="7">
+                            
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="selector" colspan="4">
+                            <div class="month-selector">
+                                <div class="month-selector-disp">
+                                    <span>...</span>
+                                    <svg widht="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>    
+                                </div>
+                                <div class="month-selector-list">
+                                    <ul>
+                                    </ul>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="selector" colspan="3">
+                            <div class="year-selector">
+                                <input type="number" class="year-selector-disp" value="" min="1900" max="2100">
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bodyWeek">
+                    <tr>
+                    </tr>
+                </tbody>
+                <tbody class="bodyDates">
+
+                </tbody>
+            </table>
+        </div>
+        <script src="calendar.js"></script>
+    </body>
+</html>

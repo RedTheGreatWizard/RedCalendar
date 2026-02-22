@@ -1,0 +1,216 @@
+
+body {
+    padding: 0;
+    margin: 25px;
+}
+
+/*Red Calendar css*/
+
+/* Az egész táblázat szülő eleme. Itt az egésznek hátteret, valamint lekerekítést lehet adni.*/
+div.redCalendar { 
+    padding: 8px;
+    margin: 0;
+    border-radius: 23px;
+    border: 0px solid #000;
+    background: linear-gradient(to bottom, #999, #777);
+    overflow: hidden;
+    width: max-content;
+}
+
+/* Táblázat stílusa*/
+table.redCalendar { 
+    padding: 0;
+    margin: 0;
+    border-spacing: 0;
+    border-radius: 15px;
+    overflow: hidden;
+    color: #000;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+
+/* Itt foglalnak helyet a táblázat címe és a hónap/év kiválasztó*/
+table.redCalendar thead { 
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(to bottom, #888, #444);
+}
+table.redCalendar thead th { 
+    padding: 5px 0px 3px 0px;
+    margin: 0;
+    color: #000;
+    border-bottom: 2px solid black;
+}
+table.redCalendar thead tr {
+    padding: 0;
+    margin: 0;
+    border: 2px solid black;
+}
+
+
+/* A táblázat két <tbody> elemet tartalmaz. A bodyWeek részben van kiíratva a hét napjainak elnevezései*/
+table.redCalendar tbody.bodyWeek { 
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(to bottom, #888, #444)
+
+}
+table.redCalendar tbody.bodyWeek tr {
+    padding: 0;
+    margin: 0;
+    font-size: 15px;
+    color: black;
+}
+table.redCalendar tbody.bodyWeek td {
+    padding: 0;
+    margin: 0;
+    font-weight:bolder;
+    box-sizing: border-box;
+    height: 30px;
+    width: 30px;
+}
+
+
+/* A táblázat két <tbody> elemet tartalmaz. A bodyDates részben van kiíratva a hónap napjai*/
+table.redCalendar tbody.bodyDates { 
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(to bottom, #aaa, #888)
+
+}
+table.redCalendar tbody.bodyDates tr {
+    padding: 0;
+    margin: 0;
+
+}
+table.redCalendar tbody.bodyDates td {
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 20px;
+    width: 30px;
+}
+
+/*A hónap/év kiválasztó cellák beállításai*/
+table.redCalendar thead th.selector {
+    vertical-align: center;
+    text-align: center;
+}
+
+/*A hónap kiválasztó stílusai*/
+table.redCalendar thead div.month-selector{
+    position:relative; /*Ez által a gyermek elemei ennek a felső sarkát fogják kezdőpontnak venni (0,0)*/ 
+    box-sizing: border-box; /*Alapesetben a margók és szegélyek még pluszba rátesznek az elem szélességére, ezzel a beállítással megszabjuk, hogy a megadott méreteket tartsa (width,height) és ezáltal a szegélyek és margók befelé veszik el a helyet*/
+    user-select: none; /*Az ezen az elemen belül lévő szövegeket nem lehet dupplakattintással kijelölni (kék kijelölés)*/
+    font-size: 15px;
+    /*Ez fog felelni azért, hogy a cellában középre legyen igazítva*/
+    display: inline-block; /*Ez által inline elemként fog rá tekinteni. Ez azért fontos, mert így a "text-align: center" utasítás hatni fog rá.*/
+}
+table.redCalendar thead div.month-selector-disp{
+    display: flex; /*Ez által nem egymás alá rakja az elemeket, mint alapesetben, hanem flexibilisen megpróbálja kitölteni a rendelkezésre álló helyet. Ha elfér a sorban a másik elem, akkor mellé rakja és nem alá.*/
+    justify-content: space-between; /*Megadjuk a "display: flex" szabályát. Ez megmondja, hogy próbálja meg a két elemet minél távolabb elhelyezni egymástól. Két elem esetén ez azt jelenti, hogy az egyiket bal szélre a másikat pedig jobb szélre igazítja.*/
+    padding: 5px 5px;
+    background-color: #aaa;
+    border: 2px solid #000;
+    border-radius: 5px;
+    width: 100px;
+    cursor: pointer; /*Ha rávisszük az elemre az egeret, akkor az mutatóujjasá válik*/
+    overflow: hidden; /*Az elemből kilógó elemeket eltűnteti. Ha van lekerekítése, akkor az azon kilógó elemeket is eltűnteti.*/
+}
+table.redCalendar thead div.month-selector-list{
+    position: absolute; /*Itt a korábban megadott "position: relative"-hez képest fogunk pozíciót megadni.*/
+    top: 100%; /*Ha %-ban adjuk meg akkor a "position: relative"-hez képest vesszük %-ban a magasságát (top esetén). "top: 100%" esetén azt mondjuk, hogy tolja el a "position: relative" elem magasságával megegyező mértékben lefelé.*/
+    left: 0; /*Ezzel a jobbra irányú eltolást adjuk meg. Mivel szeretnénk, hogy illeszkedjen a szülő elemhez, így 0-át adunk meg.*/
+    right: 0; /*Ezzel is a szülő elmhez való illeszkedést adjuk meg, de másképpen működik. Amikor megadjuk, hogy "right:0", akkor az elemet arra kényszerítjük, hogy vegyen fel akkora szélességet mint a szülő elem. Ha bármi mást adunk meg, vagy nem írjuk ki, akkor elsőkörben a tartalma alapján határozza meg a szélességét.*/
+    background-color: #aaa;
+    border: 2px solid #000;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    
+    /*Ezzel érjük el, hogy legyen egy maximális mérete a legördülő listának és az görgethető legyen*/
+    max-height: 150px;
+    overflow-y: auto; /*Görgetés engedélyezése, ha a tartalom kilóg*/
+
+    display: none; /*Alapból eltüntetjük*/
+
+    z-index: 100; /*Ezáltal minden elem főlé kerül, így mindenféleképpen látható lesz. !Ha létezik egy olyan elem, aminek nagyobb a z indexe és pont ennek az elemnek a helyén van akkor az fog látszódni és kitakarja ezt az elemet!*/
+}
+table.redCalendar thead div.month-selector-list.open{ /*Ha ez az elem megkapja pluszba az open class nevet, akkor ez a rész felülírja az alapbeállítását.*/
+    display: block; /*Léthatóvá teszi*/
+}
+table.redCalendar thead div.month-selector-list ul{
+    padding: 0;
+    margin: 0;
+    list-style-type:none;
+    text-align: left;
+}
+table.redCalendar thead div.month-selector-list ul li.selected{
+    background-color: #ff0;
+}
+table.redCalendar thead div.month-selector-list li:hover{
+    /*Ha az egyik lista elem fölé visszük az egeret, akkor az legyen valamilyen formában kijelölve*/
+    background-color: #777;
+}
+
+
+/*Az év kiválasztó stílusai*/
+table.redCalendar thead div.year-selector{
+    box-sizing: border-box; /*Alapesetben a margók és szegélyek még pluszba rátesznek az elem szélességére, ezzel a beállítással megszabjuk, hogy a megadott méreteket tartsa (width,height) és ezáltal a szegélyek és margók befelé veszik el a helyet*/
+    user-select: none; /*Az ezen az elemen belül lévő szövegeket nem lehet dupplakattintással kijelölni (kék kijelölés)*/
+    font-size: 15px;
+    
+    /*Ez fog felelni azért, hogy a cellában középre legyen igazítva*/
+    display: inline-block; /*Ez által inline elemként fog rá tekinteni. Ez azért fontos, mert így a "text-align: center" utasítás hatni fog rá.*/
+}
+table.redCalendar thead input.year-selector-disp{
+    box-sizing: border-box;
+    padding: 5px;
+    background-color: #aaa;
+    border: 2px solid #000;
+    border-radius: 5px;
+    
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    
+    /* Eltünteti a kattintáskor megjelenő alapértelmezett kék körvonalat */
+    outline: none;
+}
+table.redCalendar thead input.year-selector-disp:focus{
+    /*A stílusa, amikor rákattintanak erre az elemre*/
+    background-color: #ccc;
+}
+/* A nyilak eltüntetése Chrome, Safari, Edge, Opera böngészőkben */
+table.redCalendar thead input.year-selector-disp::-webkit-outer-spin-button,
+table.redCalendar thead input.year-selector-disp::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* A nyilak eltüntetése Firefox böngészőben */
+table.redCalendar thead input.year-selector-disp {
+    -moz-appearance: textfield;
+}
+
+
+/* Az egyedi stílust igénylő css-ek*/
+.redCalendar-today {
+    border: 4px solid red;
+}
+.redCalendar-selected {
+    background-color: #cc0;
+}
+.redCalendar-otherMonth {
+    color: #444;
+}
+.redCalendar-weekendDay {
+    color: #c00;
+}
+.redCalendar-weekendDay.redCalendar-otherMonth {
+    color: #822;
+}
+
