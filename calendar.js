@@ -164,15 +164,274 @@ const nameObj = {
         ]
     }
 }
+const cssStyle = document.createElement("style");
+cssStyle.innerHTML = `
 
-const tbldivS = document.querySelectorAll("div.redCalendar");
+    /* Az egész táblázat szülő eleme. Itt az egésznek hátteret, valamint lekerekítést lehet adni.*/
+    div.redCalendar { 
+        padding: var(--divpad);
+        margin: 0;
+        border-radius: calc(var(--tableradius) + var(--divpad));
+        border: 0px solid #000;
+        background: linear-gradient(to bottom, #999, #777);
+        overflow: hidden;
+        width: max-content;
+    }
 
-initialize_calendar(
-    tbldivS[0],
-    {
-        title: "Kezdő dátum",
-        lang: "magyar"
-    })
+    /* Táblázat stílusa*/
+    table.redCalendar { 
+        padding: 0;
+        margin: 0;
+        border-spacing: 0;
+        border-radius: var(--tableradius);
+        overflow: hidden;
+        color: #000;
+        font-weight: bold;
+        font-family: sans-serif;
+        text-align: center;
+        user-select: none;
+    }
+
+
+    /* Itt foglalnak helyet a táblázat címe és a hónap/év kiválasztó*/
+    table.redCalendar thead { 
+        padding: 0;
+        margin: 0;
+        background: linear-gradient(to bottom, #888, #444);
+    }
+    table.redCalendar thead th { 
+        padding: var(--thpad) 0px var(--thpad) 0px;
+        margin: 0;
+        color: #000;
+    }
+    table.redCalendar thead tr {
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Itt specifikusan lehet módosítani a táblázat címe cellát*/
+    table.redCalendar thead th.table-title{
+        font-size: var(--titlefont);
+        margin: 0;
+        height: var(--thheight);
+    }
+
+    /* Itt specifikusan lehet módosítani a kiválasztó cellákat*/
+    table.redCalendar thead th.selector{
+        margin: 0;
+        height: var(--thheight);
+    }
+
+
+
+    /* A táblázat két <tbody> elemet tartalmaz. A bodyWeek részben van kiíratva a hét napjainak elnevezései*/
+    table.redCalendar tbody.bodyWeek { 
+        padding: 0;
+        margin: 0;
+        background: linear-gradient(to bottom, #888, #444)
+
+    }
+    table.redCalendar tbody.bodyWeek tr {
+        padding: 0;
+        margin: 0;
+        font-size: var(--fontsize);
+        color: black;
+    }
+    table.redCalendar tbody.bodyWeek td {
+        padding: 0;
+        margin: 0;
+        font-weight:bolder;
+        box-sizing: border-box;
+        height: var(--tdsize);
+        width: var(--tdsize);
+    }
+
+
+    /* A táblázat két <tbody> elemet tartalmaz. A bodyDates részben van kiíratva a hónap napjai*/
+    table.redCalendar tbody.bodyDates { 
+        padding: 0;
+        margin: 0;
+        background: linear-gradient(to bottom, #aaa, #888)
+
+    }
+    table.redCalendar tbody.bodyDates tr {
+        padding: 0;
+        margin: 0;
+
+    }
+    table.redCalendar tbody.bodyDates td {
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        box-sizing: border-box;
+        font-size: var(--fontsize);
+        height: var(--tdsize);
+        width: var(--tdsize);
+    }
+
+    /*A hónap/év kiválasztó cellák beállításai*/
+    table.redCalendar thead th.selector {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    /*A hónap kiválasztó stílusai*/
+    table.redCalendar thead div.month-selector{
+        position:relative; /*Ez által a gyermek elemei ennek a felső sarkát fogják kezdőpontnak venni (0,0)*/ 
+        height: var(--thheight);
+        user-select: none; /*Az ezen az elemen belül lévő szövegeket nem lehet dupplakattintással kijelölni (kék kijelölés)*/
+        /*Ez fog felelni azért, hogy a cellában középre legyen igazítva*/
+        display: inline-block; /*Ez által inline elemként fog rá tekinteni. Ez azért fontos, mert így a "text-align: center" utasítás hatni fog rá.*/
+    }
+    table.redCalendar thead div.month-selector-disp{
+        display: flex; /*Ez által nem egymás alá rakja az elemeket, mint alapesetben, hanem flexibilisen megpróbálja kitölteni a rendelkezésre álló helyet. Ha elfér a sorban a másik elem, akkor mellé rakja és nem alá.*/
+        justify-content: space-between; /*Megadjuk a "display: flex" szabályát. Ez megmondja, hogy próbálja meg a két elemet minél távolabb elhelyezni egymástól. Két elem esetén ez azt jelenti, hogy az egyiket bal szélre a másikat pedig jobb szélre igazítja.*/
+        padding: 0 0 0 var(--thpad);
+        background-color: #aaa;
+        border: var(--border2) solid #000;
+        border-radius: var(--selrad);
+        width: var(--monthselw);
+        height: calc(var(--thheight) - 2*var(--border2));
+        font-size: var(--fontsize);
+        align-items: center;
+        cursor: pointer; /*Ha rávisszük az elemre az egeret, akkor az mutatóujjasá válik*/
+        overflow: hidden; /*Az elemből kilógó elemeket eltűnteti. Ha van lekerekítése, akkor az azon kilógó elemeket is eltűnteti.*/
+        vertical-align: middle;
+    }
+    table.redCalendar thead div.month-selector-list{
+        position: absolute; /*Itt a korábban megadott "position: relative"-hez képest fogunk pozíciót megadni.*/
+        top: 100%; /*Ha %-ban adjuk meg akkor a "position: relative"-hez képest vesszük %-ban a magasságát (top esetén). "top: 100%" esetén azt mondjuk, hogy tolja el a "position: relative" elem magasságával megegyező mértékben lefelé.*/
+        left: 0; /*Ezzel a jobbra irányú eltolást adjuk meg. Mivel szeretnénk, hogy illeszkedjen a szülő elemhez, így 0-át adunk meg.*/
+        right: 0; /*Ezzel is a szülő elmhez való illeszkedést adjuk meg, de másképpen működik. Amikor megadjuk, hogy "right:0", akkor az elemet arra kényszerítjük, hogy vegyen fel akkora szélességet mint a szülő elem. Ha bármi mást adunk meg, vagy nem írjuk ki, akkor elsőkörben a tartalma alapján határozza meg a szélességét.*/
+        background-color: #aaa;
+        border: var(--border2) solid #000;
+        border-radius: var(--selrad);
+        font-size: var(--fontsize);
+        
+        /*Ezzel érjük el, hogy legyen egy maximális mérete a legördülő listának és az görgethető legyen*/
+        max-height: var(--monthlisth);
+        overflow-y: auto; /*Görgetés engedélyezése, ha a tartalom kilóg*/
+
+        display: none; /*Alapból eltüntetjük*/
+
+        z-index: 100; /*Ezáltal minden elem főlé kerül, így mindenféleképpen látható lesz. !Ha létezik egy olyan elem, aminek nagyobb a z indexe és pont ennek az elemnek a helyén van akkor az fog látszódni és kitakarja ezt az elemet!*/
+    }
+    table.redCalendar thead div.month-selector-list.open{ /*Ha ez az elem megkapja pluszba az open class nevet, akkor ez a rész felülírja az alapbeállítását.*/
+        display: block; /*Léthatóvá teszi*/
+    }
+    table.redCalendar thead div.month-selector-list ul{
+        padding: 0;
+        margin: 0;
+        list-style-type:none;
+        text-align: left;
+    }
+    table.redCalendar thead div.month-selector-list ul li.selected{
+        background-color: #ff0;
+    }
+    table.redCalendar thead div.month-selector-list li:hover{
+        /*Ha az egyik lista elem fölé visszük az egeret, akkor az legyen valamilyen formában kijelölve*/
+        background-color: #777;
+    }
+
+
+    /*Az év kiválasztó stílusai*/
+    table.redCalendar thead div.year-selector{
+        user-select: none; /*Az ezen az elemen belül lévő szövegeket nem lehet dupplakattintással kijelölni (kék kijelölés)*/
+        height: var(--thheight);
+        /*Ez fog felelni azért, hogy a cellában középre legyen igazítva*/
+        display: inline-block; /*Ez által inline elemként fog rá tekinteni. Ez azért fontos, mert így a "text-align: center" utasítás hatni fog rá.*/
+    }
+    table.redCalendar thead input.year-selector-disp{
+        padding: 0;
+        background-color: #aaa;
+        border: var(--border2) solid #000;
+        border-radius: var(--selrad);
+        width: var(--yearselw);
+        height: calc(var(--thheight) - 2*var(--border2));
+        font-family: sans-serif;
+        font-size: var(--fontsize);
+        font-weight: bold;
+        color: #000;
+        text-align: center;
+        
+        /* Eltünteti a kattintáskor megjelenő alapértelmezett kék körvonalat */
+        outline: none;
+    }
+    table.redCalendar thead input.year-selector-disp:focus{
+        /*A stílusa, amikor rákattintanak erre az elemre*/
+        background-color: #ccc;
+    }
+    /* A nyilak eltüntetése Chrome, Safari, Edge, Opera böngészőkben */
+    table.redCalendar thead input.year-selector-disp::-webkit-outer-spin-button,
+    table.redCalendar thead input.year-selector-disp::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    /* A nyilak eltüntetése Firefox böngészőben */
+    table.redCalendar thead input.year-selector-disp {
+        -moz-appearance: textfield;
+    }
+
+
+    /* Az egyedi stílust igénylő css-ek*/
+    .redCalendar-today {
+        box-shadow: inset 0 0 0 var(--border3) red;
+    }
+    .redCalendar-selected {
+        background-color: #cc0;
+    }
+    .redCalendar-otherMonth {
+        color: #444;
+    }
+    .redCalendar-weekendDay {
+        color: #c00;
+    }
+    .redCalendar-weekendDay.redCalendar-otherMonth {
+        color: #822;
+    }
+`;
+cssStyle.setAttribute("id", "redCalendar-main-style");
+document.head.appendChild(cssStyle);
+
+const tableHTML = `
+    <table class="redCalendar">
+        <thead>
+            <tr>
+                <th class="table-title" colspan="7">
+                    
+                </th>
+            </tr>
+            <tr>
+                <th class="selector" colspan="4">
+                    <div class="month-selector">
+                        <div class="month-selector-disp">
+                            <span>...</span>
+                            <svg widht="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>    
+                        </div>
+                        <div class="month-selector-list">
+                            <ul>
+                            </ul>
+                        </div>
+                    </div>
+                </th>
+                <th class="selector" colspan="3">
+                    <div class="year-selector">
+                        <input type="number" class="year-selector-disp" value="" min="1900" max="2100">
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="bodyWeek">
+            <tr>
+            </tr>
+        </tbody>
+        <tbody class="bodyDates">
+
+        </tbody>
+    </table>
+`;
 
 function initialize_calendar(
     div, // A div tároló, amibe a naptár kerül.
@@ -181,8 +440,35 @@ function initialize_calendar(
         lang = "magyar", // A naptár nyelve
         monthNamesLength = "long",
         weekDayNamesLength = "short",
+        id = null,
     })
 {
+    const divHeight = div.getBoundingClientRect().height;
+    console.log(divHeight);
+    const ratio = divHeight/300;
+    div.style.height = `${divHeight - 2*10*ratio}px`;
+
+    // A css-hez tartozó méretek kiszámolása.
+    div.style.setProperty('--fontsize', `${15*ratio}px`);
+    div.style.setProperty('--border2', `${2*ratio}px`);
+    div.style.setProperty('--border3', `${3*ratio}px`);
+    div.style.setProperty('--divpad', `${10*ratio}px`);
+    div.style.setProperty('--tableradius', `${15*ratio}px`);
+    div.style.setProperty('--thpad', `${5*ratio}px`);
+    div.style.setProperty('--titlefont', `${20*ratio}px`);
+    div.style.setProperty('--thheight', `${25*ratio}px`);
+    div.style.setProperty('--tdsize', `${30*ratio}px`);
+    div.style.setProperty('--selrad', `${5*ratio}px`);
+    div.style.setProperty('--yearselw', `${66*ratio}px`);
+    div.style.setProperty('--monthselw', `${91*ratio}px`);
+    div.style.setProperty('--monthlisth', `${150*ratio}px`);
+
+    // Beillesztjük a táblázat sablonunkat a kiszemelt divhez.
+    div.classList.add("redCalendar");
+    div.setAttribute("id", id || `redCalendar-${i}`); // Ha van megadott id név, akkor azt rakja bele, vagy ha nincs, akkor generál egyet.
+    if(!id) i++; 
+    div.innerHTML = tableHTML;
+
     // Main nap legenerálása
     const today = new Date();
     today.setHours(0,0,0,0);
@@ -408,3 +694,17 @@ function initialize_calendar(
         };
     }
 }   
+
+const tbldivS = document.querySelectorAll("div.redCalendar");
+
+let i = 1;
+for(const tbl of tbldivS){
+    console.log(tbl);
+    initialize_calendar(
+    tbl,
+    {
+        title: "Kezdő dátum",
+        lang: "magyar",
+        monthNamesLength: "short"
+    })
+}
