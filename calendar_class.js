@@ -174,7 +174,7 @@ class RedCalendar {
             margin: 0;
             border-radius: calc(var(--tableradius) + var(--divpad));
             border: 0px solid #000;
-            background: linear-gradient(to bottom, #999, #777);
+            background: linear-gradient(to bottom, var(--cBackL), var(--cBackD));
             overflow: hidden;
             width: max-content;
         }
@@ -198,7 +198,7 @@ class RedCalendar {
         table.redCalendar thead { 
             padding: 0;
             margin: 0;
-            background: linear-gradient(to bottom, #888, #444);
+            background: linear-gradient(to bottom, var(--cPrimL), var(--cPrimD));
         }
         table.redCalendar thead th { 
             padding: var(--thpad) 0px var(--thpad) 0px;
@@ -229,7 +229,7 @@ class RedCalendar {
         table.redCalendar tbody.bodyWeek { 
             padding: 0;
             margin: 0;
-            background: linear-gradient(to bottom, #888, #444)
+            background: linear-gradient(to bottom, var(--cPrimL), var(--cPrimD))
 
         }
         table.redCalendar tbody.bodyWeek tr {
@@ -252,7 +252,7 @@ class RedCalendar {
         table.redCalendar tbody.bodyDates { 
             padding: 0;
             margin: 0;
-            background: linear-gradient(to bottom, #aaa, #888)
+            background: linear-gradient(to bottom, var(--cSecL), var(--cSecD))
 
         }
         table.redCalendar tbody.bodyDates tr {
@@ -441,6 +441,463 @@ class RedCalendar {
     #tDateS;
     #tBodyDates;
 
+    // Külső osztály behúzása
+    static #ColorClass = class Color {
+        // V.0.0216.6
+        // Forrás: https://github.com/RedTheGreatWizard/JS-Color-class
+        static #look_up = {
+            "aliceblue" : "rgb(240, 248, 255)",
+            "antiquewhite" : "rgb(250, 235, 215)",
+            "aqua" : "rgb(0, 255, 255)",
+            "aquamarine" : "rgb(127, 255, 212)",
+            "azure" : "rgb(240, 255, 255)",
+            "beige" : "rgb(245, 245, 220)",
+            "bisque" : "rgb(255, 228, 196)",
+            "black" : "rgb(0, 0, 0)",
+            "blanchedalmond" : "rgb(255, 235, 205)",
+            "blue" : "rgb(0, 0, 255)",
+            "blueviolet" : "rgb(138, 43, 226)",
+            "brown" : "rgb(165, 42, 42)",
+            "burlywood" : "rgb(222, 184, 135)",
+            "cadetblue" : "rgb(95, 158, 160)",
+            "chartreuse" : "rgb(127, 255, 0)",
+            "chocolate" : "rgb(210, 105, 30)",
+            "coral" : "rgb(255, 127, 80)",
+            "cornflowerblue" : "rgb(100, 149, 237)",
+            "cornsilk" : "rgb(255, 248, 220)",
+            "crimson" : "rgb(220, 20, 60)",
+            "cyan" : "rgb(0, 255, 255)",
+            "darkblue" : "rgb(0, 0, 139)",
+            "darkcyan" : "rgb(0, 139, 139)",
+            "darkgoldenrod" : "rgb(184, 134, 11)",
+            "darkgray" : "rgb(169, 169, 169)",
+            "darkgreen" : "rgb(0, 100, 0)",
+            "darkgrey" : "rgb(169, 169, 169)",
+            "darkkhaki" : "rgb(189, 183, 107)",
+            "darkmagenta" : "rgb(139, 0, 139)",
+            "darkolivegreen" : "rgb(85, 107, 47)",
+            "darkorange" : "rgb(255, 140, 0)",
+            "darkorchid" : "rgb(153, 50, 204)",
+            "darkred" : "rgb(139, 0, 0)",
+            "darksalmon" : "rgb(233, 150, 122)",
+            "darkseagreen" : "rgb(143, 188, 143)",
+            "darkslateblue" : "rgb(72, 61, 139)",
+            "darkslategray" : "rgb(47, 79, 79)",
+            "darkslategrey" : "rgb(47, 79, 79)",
+            "darkturquoise" : "rgb(0, 206, 209)",
+            "darkviolet" : "rgb(148, 0, 211)",
+            "deeppink" : "rgb(255, 20, 147)",
+            "deepskyblue" : "rgb(0, 191, 255)",
+            "dimgray" : "rgb(105, 105, 105)",
+            "dimgrey" : "rgb(105, 105, 105)",
+            "dodgerblue" : "rgb(30, 144, 255)",
+            "firebrick" : "rgb(178, 34, 34)",
+            "floralwhite" : "rgb(255, 250, 240)",
+            "forestgreen" : "rgb(34, 139, 34)",
+            "fuchsia" : "rgb(255, 0, 255)",
+            "gainsboro" : "rgb(220, 220, 220)",
+            "ghostwhite" : "rgb(248, 248, 255)",
+            "gold" : "rgb(255, 215, 0)",
+            "goldenrod" : "rgb(218, 165, 32)",
+            "gray" : "rgb(128, 128, 128)",
+            "green" : "rgb(0, 128, 0)",
+            "greenyellow" : "rgb(173, 255, 47)",
+            "grey" : "rgb(128, 128, 128)",
+            "honeydew" : "rgb(240, 255, 240)",
+            "hotpink" : "rgb(255, 105, 180)",
+            "indianred" : "rgb(205, 92, 92)",
+            "indigo" : "rgb(75, 0, 130)",
+            "ivory" : "rgb(255, 255, 240)",
+            "khaki" : "rgb(240, 230, 140)",
+            "lavender" : "rgb(230, 230, 250)",
+            "lavenderblush" : "rgb(255, 240, 245)",
+            "lawngreen" : "rgb(124, 252, 0)",
+            "lemonchiffon" : "rgb(255, 250, 205)",
+            "lightblue" : "rgb(173, 216, 230)",
+            "lightcoral" : "rgb(240, 128, 128)",
+            "lightcyan" : "rgb(224, 255, 255)",
+            "lightgoldenrodyellow" : "rgb(250, 250, 210)",
+            "lightgray" : "rgb(211, 211, 211)",
+            "lightgreen" : "rgb(144, 238, 144)",
+            "lightgrey" : "rgb(211, 211, 211)",
+            "lightpink" : "rgb(255, 182, 193)",
+            "lightsalmon" : "rgb(255, 160, 122)",
+            "lightseagreen" : "rgb(32, 178, 170)",
+            "lightskyblue" : "rgb(135, 206, 250)",
+            "lightslategray" : "rgb(119, 136, 153)",
+            "lightslategrey" : "rgb(119, 136, 153)",
+            "lightsteelblue" : "rgb(176, 196, 222)",
+            "lightyellow" : "rgb(255, 255, 224)",
+            "lime" : "rgb(0, 255, 0)",
+            "limegreen" : "rgb(50, 205, 50)",
+            "linen" : "rgb(250, 240, 230)",
+            "magenta" : "rgb(255, 0, 255)",
+            "maroon" : "rgb(128, 0, 0)",
+            "mediumaquamarine" : "rgb(102, 205, 170)",
+            "mediumblue" : "rgb(0, 0, 205)",
+            "mediumorchid" : "rgb(186, 85, 211)",
+            "mediumpurple" : "rgb(147, 112, 219)",
+            "mediumseagreen" : "rgb(60, 179, 113)",
+            "mediumslateblue" : "rgb(123, 104, 238)",
+            "mediumspringgreen" : "rgb(0, 250, 154)",
+            "mediumturquoise" : "rgb(72, 209, 204)",
+            "mediumvioletred" : "rgb(199, 21, 133)",
+            "midnightblue" : "rgb(25, 25, 112)",
+            "mintcream" : "rgb(245, 255, 250)",
+            "mistyrose" : "rgb(255, 228, 225)",
+            "moccasin" : "rgb(255, 228, 181)",
+            "navajowhite" : "rgb(255, 222, 173)",
+            "navy" : "rgb(0, 0, 128)",
+            "oldlace" : "rgb(253, 245, 230)",
+            "olive" : "rgb(128, 128, 0)",
+            "olivedrab" : "rgb(107, 142, 35)",
+            "orange" : "rgb(255, 165, 0)",
+            "orangered" : "rgb(255, 69, 0)",
+            "orchid" : "rgb(218, 112, 214)",
+            "palegoldenrod" : "rgb(238, 232, 170)",
+            "palegreen" : "rgb(152, 251, 152)",
+            "paleturquoise" : "rgb(175, 238, 238)",
+            "palevioletred" : "rgb(219, 112, 147)",
+            "papayawhip" : "rgb(255, 239, 213)",
+            "peachpuff" : "rgb(255, 218, 185)",
+            "peru" : "rgb(205, 133, 63)",
+            "pink" : "rgb(255, 192, 203)",
+            "plum" : "rgb(221, 160, 221)",
+            "powderblue" : "rgb(176, 224, 230)",
+            "purple" : "rgb(128, 0, 128)",
+            "rebeccapurple" : "rgb(102, 51, 153)",
+            "red" : "rgb(255, 0, 0)",
+            "rosybrown" : "rgb(188, 143, 143)",
+            "royalblue" : "rgb(65, 105, 225)",
+            "saddlebrown" : "rgb(139, 69, 19)",
+            "salmon" : "rgb(250, 128, 114)",
+            "sandybrown" : "rgb(244, 164, 96)",
+            "seagreen" : "rgb(46, 139, 87)",
+            "seashell" : "rgb(255, 245, 238)",
+            "sienna" : "rgb(160, 82, 45)",
+            "silver" : "rgb(192, 192, 192)",
+            "skyblue" : "rgb(135, 206, 235)",
+            "slateblue" : "rgb(106, 90, 205)",
+            "slategray" : "rgb(112, 128, 144)",
+            "slategrey" : "rgb(112, 128, 144)",
+            "snow" : "rgb(255, 250, 250)",
+            "springgreen" : "rgb(0, 255, 127)",
+            "steelblue" : "rgb(70, 130, 180)",
+            "tan" : "rgb(210, 180, 140)",
+            "teal" : "rgb(0, 128, 128)",
+            "thistle" : "rgb(216, 191, 216)",
+            "tomato" : "rgb(255, 99, 71)",
+            "turquoise" : "rgb(64, 224, 208)",
+            "violet" : "rgb(238, 130, 238)",
+            "wheat" : "rgb(245, 222, 179)",
+            "white" : "rgb(255, 255, 255)",
+            "whitesmoke" : "rgb(245, 245, 245)",
+            "yellow" : "rgb(255, 255, 0)",
+            "yellowgreen" : "rgb(154, 205, 50)"
+        }
+
+        // Színkódok
+        #colors = {
+            hue: 0,
+            saturation: 0,
+            lightness: 0,
+            red: 0,
+            green: 0,
+            blue: 0,
+        }
+
+        #type_lu = {
+            red: "rgb",
+            green: "rgb",
+            blue: "rgb",
+
+            hue: "hue",
+            saturation: "sl",
+            lightness: "sl",
+        }
+
+        constructor(color_code){
+            
+            const picked_color = Color.#look_up[color_code];
+            if (picked_color){color_code = picked_color};
+
+            color_code = color_code.replace(/\s/g,"").toLowerCase();
+            const regex = /^(rgb|hsl|#)(.*)/;
+            const result = color_code.match(regex);
+            if (result){
+                if (result[1] === "hsl"){ 
+                    const hslreg = /^\(([\d\.]+),?([\d\.]+)(%?),?([\d\.]+)(%?)\)/;
+                    const hslres = result[2].match(hslreg);
+                    if (hslres){
+                        this.#colors.hue = this.#normalizer(hslres[1], "hue");
+                        this.#colors.saturation = this.#normalizer(hslres[2], "sl", hslres[3]);
+                        this.#colors.lightness = this.#normalizer(hslres[4], "sl", hslres[5]);
+
+                        this.#hsl2rgb();
+                    }
+                }
+                else if (result[1] === "rgb"){
+                    const rgbreg = /^\(([\d\.]+)(%?),?([\d\.]+)(%?),?([\d\.]+)(%?)\)/;
+                    const rgbres = result[2].match(rgbreg);
+                    if (rgbres){
+                        this.#colors.red =  this.#normalizer(rgbres[1], "rgb", (rgbres[2] === "%"));
+                        this.#colors.green =  this.#normalizer(rgbres[3], "rgb", (rgbres[4] === "%"));
+                        this.#colors.blue =  this.#normalizer(rgbres[5], "rgb", (rgbres[6] === "%"));
+
+                        this.#rgb2hsl();
+                    }
+                    
+                }
+                else if (result[1] === "#"){
+                    const hexreg = /^([a-z0-9]{3}|[a-z0-9]{6})/;
+                    const hexres = result[2].match(hexreg);
+                    if (hexres[1].length === 3){
+                        const hex3 = hexres[1];
+                        this.#colors.red = Math.round(parseInt(hex3[0],16)/15*255);
+                        this.#colors.green = Math.round(parseInt(hex3[1],16)/15*255);
+                        this.#colors.blue = Math.round(parseInt(hex3[2],16)/15*255);
+                    }
+                    else if (hexres[1].length === 6){
+                        const hex6 = hexres[1];
+                        this.#colors.red = Math.round(parseInt(hex6.slice(0,2), 16));
+                        this.#colors.green = Math.round(parseInt(hex6.slice(2,4), 16));
+                        this.#colors.blue = Math.round(parseInt(hex6.slice(4,6), 16));
+                    }
+                    this.#rgb2hsl();
+                }
+                this.valid = true;
+            }
+            else{
+                this.valid = false;
+            }
+        }
+
+        get hsl(){
+            return `hsl(${this.#colors.hue},${this.#colors.saturation*100}%,${this.#colors.lightness*100}%)`;
+        }
+
+        get rgb(){
+            return `rgb(${this.#colors.red},${this.#colors.green},${this.#colors.blue})`;
+        }
+
+        get hex(){
+            const r = this.#colors.red.toString(16).padStart(2, '0');
+            const g = this.#colors.green.toString(16).padStart(2, '0');
+            const b = this.#colors.blue.toString(16).padStart(2, '0');
+
+            return `#${r}${g}${b}`;
+        }
+
+        get hue(){
+            return{
+                change: (ammount) => {this.#change("hue", ammount, 'change'); return this;},
+                increase: (ammount) => {this.#change("hue", ammount, 'inc'); return this;},
+                decrease: (ammount) => {this.#change("hue", ammount, 'dec'); return this;},
+                get: this.#colors.hue, 
+            }
+        }
+
+        get saturation(){
+            return{
+                change: (ammount) => {this.#change("saturation", ammount, 'change'); return this;},
+                increase: (ammount) => {this.#change("saturation", ammount, 'inc'); return this;},
+                decrease: (ammount) => {this.#change("saturation", ammount, 'dec'); return this;},
+                get: this.#colors.saturation, 
+            }
+        }
+
+        get lightness(){
+            return{
+                change: (ammount) => {this.#change("lightness", ammount, 'change'); return this;},
+                increase: (ammount) => {this.#change("lightness", ammount, 'inc'); return this;},
+                decrease: (ammount) => {this.#change("lightness", ammount, 'dec'); return this;},
+                get: this.#colors.lightness, 
+            }
+        }
+
+        get red(){
+            return{
+                change: (ammount) => {this.#change("red", ammount, 'change'); return this;},
+                increase: (ammount) => {this.#change("red", ammount, 'inc'); return this;},
+                decrease: (ammount) => {this.#change("red", ammount, 'dec'); return this;},
+                get: this.#colors.red, 
+            }
+        }
+
+        get green(){
+            return{
+                change: (ammount) => {this.#change("green", ammount, 'change'); return this;},
+                increase: (ammount) => {this.#change("green", ammount, 'inc'); return this;},
+                decrease: (ammount) => {this.#change("green", ammount, 'dec'); return this;},
+                get: this.#colors.green, 
+            }
+        }
+
+        get blue(){
+            return{
+                change: (ammount) => {this.#change("blue", ammount, 'change'); return this;},
+                increase: (ammount) => {this.#change("blue", ammount, 'inc'); return this;},
+                decrease: (ammount) => {this.#change("blue", ammount, 'dec'); return this;},
+                get: this.#colors.blue, 
+            }
+        }
+
+        #change(type, val, operation){
+            const valS = val.toString();
+            const valreg = /^(\d+\.?\d*|\.\d+)(%?)$/;
+            const res = valS.match(valreg);
+
+            const typeN = this.#type_lu[type];
+            if(res){
+                let resV = parseFloat(res[1]);
+                const perc = ("%" === res[2]);
+                const NV = this.#normalizer(resV, typeN, perc);
+                const CV = this.#colors[type];
+                switch (operation){
+                    case "change":
+                        this.#colors[type] = NV;
+                        break;
+                        
+                    case "inc":                    
+                        this.#colors[type] = this.#normalizer((CV + NV), typeN);
+                        break;
+                        
+                    case "dec":
+                        this.#colors[type] = this.#normalizer((CV - NV), typeN);
+                        break;
+                }
+                if (type === "hue" ||
+                    type === "saturation" ||
+                    type === "lightness" )
+                {
+                    this.#hsl2rgb();
+                }
+                else if(type === "red" ||
+                        type === "green" ||
+                        type === "blue")
+                {
+                    this.#rgb2hsl();
+                }
+            }
+        }
+
+        #hsl2rgb(){
+            const H = this.#colors.hue % 360;
+            const S = this.#colors.saturation;
+            const L = this.#colors.lightness;
+
+            const C = (1 - Math.abs(2*L - 1)) * S;
+
+            const X = C * (1 - Math.abs((H/60)%2 - 1));
+
+            let r = 0,g = 0,b = 0;
+
+            if (0 <= H && H < 60){
+                r = C;
+                g = X;
+                b = 0;
+            }
+            else if (60 <= H && H < 120){
+                r = X;
+                g = C;
+                b = 0;
+            }
+            else if (120 <= H && H < 180){
+                r = 0;
+                g = C;
+                b = X;
+            }
+            else if (180 <= H && H < 240){
+                r = 0;
+                g = X;
+                b = C;
+            }
+            else if (240 <= H && H < 300){ 
+                r = X;
+                g = 0;
+                b = C;
+            }
+            else if (300 <= H && H < 360){  
+                r = C;
+                g = 0;
+                b = X;  
+            }
+
+            const M = L - (C/2);
+            
+            this.#colors.red = Math.round((r + M) * 255);
+            this.#colors.green = Math.round((g + M) * 255);
+            this.#colors.blue = Math.round((b + M) * 255);
+        }
+
+        #rgb2hsl(){
+            const R = this.#colors.red / 255;
+            const G = this.#colors.green / 255;
+            const B = this.#colors.blue / 255;
+
+            const min = Math.min(R, G, B);
+            const max = Math.max(R, G, B);
+            const delta = max - min;
+
+            let H = 0;
+            let S = 0;
+            let L = (max + min) / 2;
+
+            if (delta !== 0){
+                S = delta / (1 - Math.abs(2*L - 1));
+
+                switch(max){
+                    case R:
+                        H = ((G - B) / delta) % 6;
+                        break;
+                    case G:
+                        H = ((B - R) / delta) + 2;
+                        break;
+                    case B:
+                        H = ((R - G) / delta) + 4;
+                        break;
+                }
+
+                H = Math.round(H * 60);
+
+                if (H < 0){ H += 360};
+            }
+
+            this.#colors.hue = H;
+            this.#colors.saturation = S;
+            this.#colors.lightness = L;
+        }
+
+        #normalizer(input, type, perc = false){
+            let val = parseFloat(input);
+            if (val < 0) {val = 0};
+            switch (type){
+                case "hue":
+                    return Math.min(val, 360);
+                case "sl":
+                    if(perc){
+                        let slV = Math.min(val, 100);
+                        slV /= 100;
+                        return slV;
+                    }
+                    else{
+                        return Math.min(val, 1);
+                    }
+                case "rgb":
+                    if(perc){
+                        let V = Math.min(val, 100);
+                        V /= 100;
+                        let rgbV = Math.round(V * 255);
+                        return rgbV;
+                    }
+                    else{
+                        return Math.min(val, 255);
+                    }
+
+            }
+        }
+    };
+
     static #add_css(){
         if(!RedCalendar.#cssAdded){
             const calStyle = document.createElement("style");
@@ -448,7 +905,7 @@ class RedCalendar {
             document.head.appendChild(calStyle);
             RedCalendar.#cssAdded = true;
         }
-    }
+    };
 
     constructor(
         div, // A div tároló, amibe a naptár kerül.
@@ -458,6 +915,9 @@ class RedCalendar {
             monthNamesLength = "long",
             weekDayNamesLength = "short",
             id = null,
+            colorPrimary = "hsl(0, 0%, 53%)",
+            colorSecondary = "hsl(0, 0%, 67%)",
+            colorBack = "hsl(0, 0%, 60%)",
         })
     {
         this.#divCont = div;
@@ -465,20 +925,48 @@ class RedCalendar {
         const ratio = divHeight/300;
         this.#divCont.style.height = `${divHeight - 2*10*ratio}px`;
 
+        function styleSetProperty(element, properties){
+            for(const [propertyName, value] of Object.entries(properties)){
+                element.style.setProperty(`--${propertyName}`, value);
+            };
+        };
+
+        // A fő színek generálása
+        const colors = {};
+        (()=>{
+            const cP = new RedCalendar.#ColorClass(colorPrimary);
+            const cS = new RedCalendar.#ColorClass(colorSecondary);
+            const cB = new RedCalendar.#ColorClass(colorBack);
+
+            colors.primary = {light: cP.hsl, dark: cP.lightness.decrease("30%").hsl};
+            colors.secondary = {light: cS.hsl, dark: cS.lightness.decrease("15%").hsl};
+            colors.back = {light: cB.hsl, dark: cB.lightness.decrease("15%").hsl};
+        })();
+
         // A css-hez tartozó méretek kiszámolása.
-        this.#divCont.style.setProperty('--fontsize', `${15*ratio}px`);
-        this.#divCont.style.setProperty('--border2', `${2*ratio}px`);
-        this.#divCont.style.setProperty('--border3', `${3*ratio}px`);
-        this.#divCont.style.setProperty('--divpad', `${10*ratio}px`);
-        this.#divCont.style.setProperty('--tableradius', `${15*ratio}px`);
-        this.#divCont.style.setProperty('--thpad', `${5*ratio}px`);
-        this.#divCont.style.setProperty('--titlefont', `${20*ratio}px`);
-        this.#divCont.style.setProperty('--thheight', `${25*ratio}px`);
-        this.#divCont.style.setProperty('--tdsize', `${30*ratio}px`);
-        this.#divCont.style.setProperty('--selrad', `${5*ratio}px`);
-        this.#divCont.style.setProperty('--yearselw', `${66*ratio}px`);
-        this.#divCont.style.setProperty('--monthselw', `${91*ratio}px`);
-        this.#divCont.style.setProperty('--monthlisth', `${150*ratio}px`);
+        styleSetProperty(this.#divCont, {
+            //Ezek lesznek a méreteket adó tulajdonságok
+            fontsize: `${15*ratio}px`,
+            border2: `${2*ratio}px`,
+            border3: `${3*ratio}px`,
+            divpad: `${10*ratio}px`,
+            tableradius: `${15*ratio}px`,
+            thpad: `${5*ratio}px`,
+            titlefont: `${20*ratio}px`,
+            thheight: `${25*ratio}px`,
+            tdsize: `${30*ratio}px`,
+            selrad: `${5*ratio}px`,
+            yearselw: `${66*ratio}px`,
+            monthselw: `${91*ratio}px`,
+            monthlisth: `${150*ratio}px`,
+            // Itt a stílust lesz megadva.
+            cPrimL: colors.primary.light,
+            cPrimD: colors.primary.dark,
+            cSecL: colors.secondary.light,
+            cSecD: colors.secondary.dark,
+            cBackL: colors.back.light,
+            cBackD: colors.back.dark,
+        });
 
         // Beillesztjük a táblázat sablonunkat a kiszemelt divhez.
         this.#divCont.classList.add("redCalendar");
@@ -641,11 +1129,11 @@ class RedCalendar {
         });
 
 
-    }
+    };
 
     get selDate(){
         return this.#selected_date;
-    }
+    };
 
     #fill_table(year,month,selectedDate = null){
         const dateIterator = new Date(`${year}-${month}-01`); // Ez lesz a dátumiterátor amivel végig megyünk a naptáron
@@ -688,13 +1176,13 @@ class RedCalendar {
         }
         this.#tBodyDates.innerHTML = "";
         this.#tBodyDates.appendChild(fragDates);
-    }
+    };
 
     #change_table(){
         const chMonth = this.#monthSelDiv.dataset.month;
         const chYear = this.#yearSelDisp.value;
         this.#fill_table(chYear,chMonth);
-    }
+    };
 
     #date_conv(date_class){
         const dcYear = parseInt(date_class.getFullYear(),10);
@@ -718,5 +1206,5 @@ class RedCalendar {
                 date: dcDateS,
             },
         };
-    }
-}
+    };
+};
